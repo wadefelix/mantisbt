@@ -152,7 +152,7 @@ function mc_issue_get_history( $p_username, $p_password, $p_issue_id ) {
 	if( !access_has_bug_level( VIEWER, $p_issue_id, $t_user_id ) ){
 		return mci_soap_fault_access_denied( $t_user_id );
 	}
-	
+
 	$t_user_access_level = user_get_access_level( $t_user_id, $t_project_id );
 	if( !access_compare_level( $t_user_access_level, config_get( 'view_history_threshold' ) ) ){
 		return mci_soap_fault_access_denied( $t_user_id );
@@ -205,12 +205,26 @@ function mci_issue_set_custom_fields( $p_issue_id, &$p_custom_fields, $p_log_ins
 		foreach( $p_custom_fields as $t_custom_field ) {
 
 			$t_custom_field = SoapObjectsFactory::unwrapObject( $t_custom_field );
+			# Verify validity of custom field specification
+			$t_msg = 'Invalid Custom field specification';
+			$t_valid_cf = isset( $t_custom_field['field'] ) && isset( $t_custom_field['value'] );
+			if( $t_valid_cf ) {
+				$t_field = get_object_vars( $t_custom_field['field'] );
+				if( ( !isset( $t_field['id'] ) || $t_field['id'] == 0 ) && !isset( $t_field['name'] ) ) {
+					$t_valid_cf = false;
+					$t_msg .= ", either 'name' or 'id' != 0 or must be given.";
+				}
+			}
+
+			if( !$t_valid_cf ) {
+				return SoapObjectsFactory::newSoapFault( 'Client', $t_msg );
+			}
 
 			# get custom field id from object ref
 			$t_custom_field_id = mci_get_custom_field_id_from_objectref( $t_custom_field['field'] );
 
 			if( $t_custom_field_id == 0 ) {
-				return SoapObjectsFactory::newSoapFault('Client', 'Custom field ' . $t_custom_field['field']['name'] . ' not found.');
+				return SoapObjectsFactory::newSoapFault( 'Client', "Custom field '" . $t_field['name'] . "' not found." );
 			}
 
 			# skip if current user doesn't have login access.
@@ -452,7 +466,7 @@ function mci_issue_set_monitors( $p_issue_id , $p_requesting_user_id, $p_monitor
  */
 function mc_issue_get_biggest_id( $p_username, $p_password, $p_project_id ) {
 	global $g_project_override;
-	
+
 	$t_user_id = mci_check_login( $p_username, $p_password );
 	if( $t_user_id === false ) {
 		return mci_soap_fault_login_failed();
@@ -535,7 +549,7 @@ function mc_issue_get_biggest_id( $p_username, $p_password, $p_project_id ) {
  */
 function mc_issue_get_id_from_summary( $p_username, $p_password, $p_summary ) {
 	global $g_project_override;
-	
+
 	$t_user_id = mci_check_login( $p_username, $p_password );
 	if( $t_user_id === false ) {
 		return mci_soap_fault_login_failed();
@@ -657,7 +671,9 @@ function mc_issue_add( $p_username, $p_password, $p_issue ) {
 
 	if(( $t_project_id == 0 ) || !project_exists( $t_project_id ) ) {
 		if( $t_project_id == 0 ) {
-			return SoapObjectsFactory::newSoapFault('Client', "Project '" . $t_project['name'] . "' does not exist.");
+			# compatibility with NuSoap (which uses arrays)
+			$t_project = (object)$t_project;
+			return SoapObjectsFactory::newSoapFault('Client', "Project '" . $t_project->name . "' does not exist.");
 		} else {
 			return SoapObjectsFactory::newSoapFault('Client', "Project with id '" . $t_project_id . "' does not exist.");
 		}
@@ -1027,7 +1043,7 @@ function mc_issue_update( $p_username, $p_password, $p_issue_id, $p_issue ) {
 
 function mc_issue_set_tags ( $p_username, $p_password, $p_issue_id, $p_tags ) {
 	global $g_project_override;
-	
+
 	$t_user_id = mci_check_login( $p_username, $p_password );
 	if( $t_user_id === false ) {
 		return mci_soap_fault_login_failed();
@@ -1063,7 +1079,7 @@ function mc_issue_set_tags ( $p_username, $p_password, $p_issue_id, $p_tags ) {
  */
 function mc_issue_delete( $p_username, $p_password, $p_issue_id ) {
 	global $g_project_override;
-	
+
 	$t_user_id = mci_check_login( $p_username, $p_password );
 	if( $t_user_id === false ) {
 		return mci_soap_fault_login_failed();
@@ -1075,7 +1091,7 @@ function mc_issue_delete( $p_username, $p_password, $p_issue_id ) {
 
 	$t_project_id = bug_get_field( $p_issue_id, 'project_id' );
 	$g_project_override = $t_project_id;
-	
+
 	if( !mci_has_readwrite_access( $t_user_id, $t_project_id ) ) {
 		return mci_soap_fault_access_denied( $t_user_id );
 	}
@@ -1098,7 +1114,7 @@ function mc_issue_delete( $p_username, $p_password, $p_issue_id ) {
  */
 function mc_issue_note_add( $p_username, $p_password, $p_issue_id, $p_note ) {
 	global $g_project_override;
-	
+
 	$t_user_id = mci_check_login( $p_username, $p_password );
 	if( $t_user_id === false ) {
 		return mci_soap_fault_login_failed();

@@ -15,10 +15,10 @@
  * @param ObjectRef  $p_object_ref   An associate array with "id" and "name" keys.
  */
 function mci_get_custom_field_id_from_objectref( $p_object_ref ) {
-	
+
 	$p_object_ref = SoapObjectsFactory::unwrapObject( $p_object_ref );
-	
-	if( (int) $p_object_ref['id'] != 0 ) {
+
+	if( isset( $p_object_ref['id'] ) && (int) $p_object_ref['id'] != 0 ) {
 		$t_id = (int) $p_object_ref['id'];
 	} else {
 		if( !is_blank( $p_object_ref['name'] ) ) {
