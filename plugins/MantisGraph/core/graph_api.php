@@ -64,6 +64,7 @@ function graph_get_font() {
 			'veraserif' => 'VeraSe.ttf',
 			'courier' => 'cour.ttf',
 			'veramono' => 'VeraMono.ttf',
+            'msyh' => 'msyh.ttf',
 		);
 
 		if( isset( $t_font_map[$t_font] ) ) {
@@ -91,6 +92,7 @@ function graph_get_font() {
 			'veraserif' => FF_VERASERIF,
 			'courier' => FF_COURIER,
 			'veramono' => FF_VERAMONO,
+            'msyh' => FF_MSYH,
 		);
 
 		if( isset( $t_font_map[$t_font] ) ) {

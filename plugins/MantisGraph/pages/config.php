@@ -31,6 +31,7 @@ $t_current_font_selected = array(
 	'veraserif' => false,
 	'courier' => false,
 	'veramono' => false,
+    'msyh' => false,
 );
 
 $t_current_font = plugin_config_get( 'font' );
@@ -121,7 +122,9 @@ function print_font_checked( $p_font_name ) {
 		<label><input type="radio" name="font" value="arial"<?php echo print_font_checked( 'arial' )?>/>Arial</label><br />
 		<label><input type="radio" name="font" value="verdana"<?php echo print_font_checked( 'verdana' )?>/>Verdana</label><br />
 		<label><input type="radio" name="font" value="trebuchet"<?php echo print_font_checked( 'trebuchet' )?>/>Trebuchet</label><br />
-		<label><input type="radio" name="font" value="verasans"<?php echo print_font_checked( 'verasans' )?>/>Vera Sans</label>
+		<label><input type="radio" name="font" value="verasans"<?php echo print_font_checked( 'verasans' )?>/>Vera Sans</label><br />
+        <br />Chinese:<br />
+        <label><input type="radio" name="font" value="msyh"<?php echo print_font_checked( 'msyh' )?>/>Microsoft Ya Hei</label>
 	</td>
 	<td style="vertical-align: top">
 		Serif:<br />
