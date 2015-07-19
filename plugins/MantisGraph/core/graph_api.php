@@ -201,7 +201,7 @@ function graph_group( $p_metrics, $p_title = '', $p_graph_width = 350, $p_graph_
 		$graph->background->color = '#FFFFFF';
 		$graph->options->font = $t_graph_font ;
 		$graph->options->font->maxFontSize = 12;
-		$graph->legend = false;
+		$graph->legend = true;
 
 		foreach( array( 'open', 'resolved', 'closed' ) as $t_label ) {
 			$graph->data[$t_label] = new ezcGraphArrayDataSet( $p_metrics[$t_label] );
@@ -384,7 +384,7 @@ function graph_cumulative_bydate( $p_metrics, $p_graph_width = 300, $p_graph_hei
 
 		$graph->xAxis->labelCallback =  'graph_date_format';
 		$graph->xAxis->axisLabelRenderer = new ezcGraphAxisRotatedLabelRenderer();
-		$graph->xAxis->axisLabelRenderer->angle = -45;
+		$graph->xAxis->axisLabelRenderer->angle = 45;
 
 		$graph->legend->position      = ezcGraph::BOTTOM;
 		$graph->legend->background    = '#FFFFFF80';
@@ -393,9 +393,11 @@ function graph_cumulative_bydate( $p_metrics, $p_graph_width = 300, $p_graph_hei
 		//$graph->driver->options->supersampling = 1;
 		$graph->driver->options->jpegQuality = 100;
 		$graph->driver->options->imageFormat = IMG_JPEG;
+        //$graph->driver->options->autoShortenString = false;
 
 		$graph->title = plugin_lang_get( 'cumulative' ) . ' ' . lang_get( 'by_date' );
 		$graph->options->font = $t_graph_font ;
+        $graph->options->font->maxFontSize = 12;
 
 		$graph->renderToOutput( $p_graph_width, $p_graph_height);
 	} else {

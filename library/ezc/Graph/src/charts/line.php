@@ -202,7 +202,8 @@ class ezcGraphLineChart extends ezcGraphChart
             $barCount = ( $mainAxis->getMajorStepCount() + 1 ) * ( $mainAxis->getMinorStepCount() - 1 );
             $stepWidth = 1 / $barCount;
         }
-
+        if ($stepWidth>0.3) $stepWidth = 0.3; // 宽度与这个有关系,但是为什么?暂时还读不懂 //这里限制$width小于0.3可时盘面不算太难看，但属治标不治本乱下药
+        
         $checkedRegularSteps = true;
         return $mainAxis->axisLabelRenderer->modifyChartDataPosition( 
             $secondAxis->axisLabelRenderer->modifyChartDataPosition(

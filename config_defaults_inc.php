@@ -1031,7 +1031,7 @@
 	 * for detailed instructions on date formatting
 	 * @global string $g_short_date_format
 	 */
-	$g_short_date_format    = 'Y-m-d';
+	$g_short_date_format    = 'm-d';
 
 	/**
 	 * date format strings defaults to ISO 8601 formatting
