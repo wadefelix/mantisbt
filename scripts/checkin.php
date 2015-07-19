@@ -46,7 +46,7 @@ $t_comment = '';
 $t_issues = array();
 $t_fixed_issues = array();
 while(( $t_line = fgets( STDIN, 1024 ) ) ) {
-	$t_comment .= $t_line;
+	$t_comment .= iconv('GB2312','UTF-8',$t_line);
 	if( preg_match_all( $t_commit_regexp, $t_line, $t_matches ) ) {
 		$t_count = count( $t_matches[0] );
 		for( $i = 0;$i < $t_count;++$i ) {
